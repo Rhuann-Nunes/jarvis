@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { sendMessageToGroq } from '@/lib/groq';
+import { useJarvisUser } from '@/hooks/useJarvisUser';
 
 // Tipo para as mensagens do chat
 interface ChatMessage {
@@ -19,19 +19,29 @@ export default function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
+  // Usar o hook para obter os dados do usuário e o cliente Jarvis
+  const { userId, userName, isLoading: isUserLoading, error: userError, jarvis } = useJarvisUser();
+  
   // Efeito para iniciar o chat com uma mensagem de boas-vindas
   useEffect(() => {
     if (messages.length === 0) {
+      let welcomeMessage = "Olá! Sou o JARVIS, seu assistente. Como posso ajudar você hoje?";
+      
+      // Adicionar informações de erro se houver
+      if (userError) {
+        welcomeMessage += "\n\nNota: " + userError;
+      }
+      
       setMessages([
         {
           id: generateId(),
-          content: "Olá! Sou o JARVIS, seu assistente. Como posso ajudar você hoje?",
+          content: welcomeMessage,
           sender: 'assistant',
           timestamp: new Date()
         }
       ]);
     }
-  }, [messages.length]);
+  }, [messages.length, userError]);
   
   // Efeito para rolar a janela de mensagens para o final quando novas mensagens são adicionadas
   useEffect(() => {
@@ -50,7 +60,7 @@ export default function ChatWidget() {
   
   // Função para enviar mensagem
   const sendMessage = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || !jarvis) return;
     
     // Adicionar mensagem do usuário ao chat
     const userMessage: ChatMessage = {
@@ -66,7 +76,7 @@ export default function ChatWidget() {
     
     try {
       // Enviar mensagem para a API e obter resposta
-      const response = await sendMessageToGroq(inputValue);
+      const response = await jarvis.sendMessage(inputValue);
       
       // Adicionar resposta do assistente ao chat
       const assistantMessage: ChatMessage = {
@@ -113,7 +123,7 @@ export default function ChatWidget() {
           <div className="bg-blue-600 dark:bg-blue-800 px-4 py-3 flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 rounded-full bg-blue-300 animate-pulse"></div>
-              <h3 className="text-white font-medium">JARVIS Assistant</h3>
+              <h3 className="text-white font-medium">JARVIS</h3>
             </div>
             <button 
               onClick={toggleChat}
@@ -162,6 +172,16 @@ export default function ChatWidget() {
               </div>
             )}
             
+            {/* Indicador de carregamento de usuário */}
+            {isUserLoading && messages.length === 0 && (
+              <div className="flex items-center justify-center h-24">
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Inicializando JARVIS...</span>
+                </div>
+              </div>
+            )}
+            
             {/* Elemento para rolar para o final das mensagens */}
             <div ref={messagesEndRef}></div>
           </div>
@@ -176,17 +196,17 @@ export default function ChatWidget() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                disabled={isLoading}
+                disabled={isLoading || isUserLoading || !jarvis}
               />
               <button 
                 className={`ml-2 rounded-full p-1.5 text-white ${
-                  isLoading || !inputValue.trim() 
+                  isLoading || isUserLoading || !jarvis || !inputValue.trim() 
                     ? 'bg-gray-400 cursor-not-allowed' 
                     : 'bg-blue-600 hover:bg-blue-700 transition-colors'
                 }`}
                 aria-label="Enviar mensagem"
                 onClick={sendMessage}
-                disabled={isLoading || !inputValue.trim()}
+                disabled={isLoading || isUserLoading || !jarvis || !inputValue.trim()}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
