@@ -8,6 +8,9 @@ README.md
 .env.development.local
 .env.test.local
 prisma
+*.sql
+temp_*
+tsconfig.tsbuildinfo
 JARVIS-API-INTEGRATION.md
 jarvis-api.md
 SOLUCAO.md

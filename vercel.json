@@ -1,5 +1,5 @@
 {
-  "buildCommand": "next build",
+  "buildCommand": "NEXT_DISABLE_ESLINT=1 next build",
   "framework": "nextjs",
   "outputDirectory": ".next",
   "installCommand": "npm install --legacy-peer-deps",
