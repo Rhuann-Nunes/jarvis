@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { supabase, createSupabaseClient } from '@/lib/supabase';
+import { createSupabaseClient } from '@/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
+import { PostgrestError } from '@supabase/supabase-js';
+
+// Criando uma interface para o tipo de cleanupResult
+interface CleanupResult {
+  success: boolean;
+  error: PostgrestError | null;
+}
 
 export async function GET() {
   try {
@@ -86,7 +93,7 @@ export async function GET() {
     }
     
     // Limpar o projeto de teste se foi criado com sucesso
-    let cleanupResult = null;
+    let cleanupResult: CleanupResult | null = null;
     if (projectData && !projectError) {
       const { error: deleteError } = await authenticatedSupabase
         .from('projects')

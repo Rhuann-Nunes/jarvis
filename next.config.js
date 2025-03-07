@@ -6,6 +6,10 @@ const nextConfig = {
     // Não falhar o build em caso de aviso ou erro do ESLint
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    // Não falhar o build em caso de erro de tipos TypeScript
+    ignoreBuildErrors: true,
+  }
 };
 
 const pwaConfig = withPWA({

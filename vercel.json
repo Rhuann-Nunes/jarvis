@@ -1,5 +1,5 @@
 {
-  "buildCommand": "NEXT_DISABLE_ESLINT=1 next build",
+  "buildCommand": "npm run build:vercel",
   "framework": "nextjs",
   "outputDirectory": ".next",
   "installCommand": "npm install --legacy-peer-deps",

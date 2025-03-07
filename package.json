@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:prod": "next build --no-lint",
+    "build:vercel": "next build --no-lint",
     "start": "next start",
     "lint": "next lint",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.8.0",

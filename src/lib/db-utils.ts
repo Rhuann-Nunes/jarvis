@@ -50,13 +50,20 @@ const mapTaskFromDb = (dbTask: any): Task => {
   
   console.log(`Convertendo project_id '${dbTask.project_id}' para projectId '${projectId}'`);
   
+  // Definir interface para o tipo de recorrência
+  interface RecurrenceData {
+    type: string;
+    interval: number;
+    daysOfWeek: any[];
+  }
+  
   // Processar campos de recorrência corretamente
-  let recurrence = undefined;
+  let recurrence: RecurrenceData | undefined = undefined;
   if (dbTask.recurrence_type) {
     recurrence = {
       type: dbTask.recurrence_type,
       interval: dbTask.recurrence_interval || 1,
-      daysOfWeek: dbTask.recurrence_days_of_week
+      daysOfWeek: dbTask.recurrence_days_of_week || []
     };
     console.log('Encontrada tarefa recorrente:', dbTask.recurrence_type, dbTask.recurrence_interval);
   }
@@ -104,12 +111,12 @@ const mapJoinedTaskFromDb = (task: Record<string, any>): Task => {
   console.log(`Convertendo project_id '${task.project_id}' para projectId '${projectId}'`);
   
   // Processar campos de recorrência corretamente
-  let recurrence = undefined;
+  let recurrence: RecurrenceData | undefined = undefined;
   if (task.recurrence_type) {
     recurrence = {
       type: task.recurrence_type,
       interval: task.recurrence_interval || 1,
-      daysOfWeek: task.recurrence_days_of_week
+      daysOfWeek: task.recurrence_days_of_week || []
     };
     console.log('Encontrada tarefa recorrente (joined):', task.recurrence_type, task.recurrence_interval);
   }
@@ -762,12 +769,12 @@ export const TaskService = {
         const projectId = task.project_id !== null ? task.project_id : undefined;
         
         // Processar campos de recorrência corretamente
-        let recurrence = undefined;
+        let recurrence: RecurrenceData | undefined = undefined;
         if (task.recurrence_type) {
           recurrence = {
             type: task.recurrence_type,
             interval: task.recurrence_interval || 1,
-            daysOfWeek: task.recurrence_days_of_week
+            daysOfWeek: task.recurrence_days_of_week || []
           };
           console.log('Encontrada tarefa recorrente (details):', task.recurrence_type, task.recurrence_interval);
         }
