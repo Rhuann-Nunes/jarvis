@@ -48,7 +48,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = exports.SectionService = exports.ProjectService = exports.TaskService = void 0;
-var prisma_1 = require("./prisma");
 var uuid_1 = require("uuid");
 // Cache for recurring task occurrences
 var occurrencesCache = {};

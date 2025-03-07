@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUserId } from '@/lib/db';
+import { getUserId } from '@/lib/user-utils';
 import SubscriptionService from '@/lib/subscription-service';
 
 interface CheckoutFormData {

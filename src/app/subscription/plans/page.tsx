@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getUserId } from '@/lib/db';
+import { getUserId } from '@/lib/user-utils';
 import SubscriptionService from '@/lib/subscription-service';
 
 export default function SubscriptionPlansPage() {

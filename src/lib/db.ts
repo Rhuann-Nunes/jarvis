@@ -1,9 +1,8 @@
 import { Task, Project, Section } from '@/types';
-// Remover importação do Prisma
 import { supabase, createSupabaseClient } from './supabase';
 import { Session } from 'next-auth';
 
-// Importar serviços do db-utils que já usam Supabase
+// Importar serviços do db-utils que usam Supabase
 import { 
   TaskService as SupabaseTaskService,
   ProjectService as SupabaseProjectService,
@@ -564,4 +563,6 @@ export const SectionService = {
   deleteSection: async (sectionId: string): Promise<void> => {
     await SupabaseSectionService.deleteSection(sectionId);
   }
-}; 
+};
+
+// Exportações já estão definidas corretamente acima com "export const" 

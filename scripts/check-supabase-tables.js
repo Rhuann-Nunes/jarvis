@@ -19,7 +19,7 @@ async function checkSupabaseTables() {
   
   // Verificar conexão com o Supabase
   const { data: connectionTest, error: connectionError } = await supabase
-    .from('_prisma_migrations')
+    .from('next_auth.users')
     .select('*')
     .limit(1);
     
@@ -63,7 +63,7 @@ async function checkSupabaseTables() {
     console.log('\n💡 Ações recomendadas:');
     console.log('1. Execute o script SQL para criar o schema e tabelas:');
     console.log('   - Abra o Dashboard do Supabase > SQL Editor');
-    console.log('   - Cole e execute o conteúdo do arquivo: prisma/supabase-next-auth-schema.sql');
+    console.log('   - Execute um SQL para criar o schema next_auth e as tabelas necessárias');
     console.log('\n2. Exponha o schema next_auth na API:');
     console.log('   - Dashboard do Supabase > Settings > API > HTTP API Settings');
     console.log('   - Adicione "next_auth" aos Exposed Schemas');

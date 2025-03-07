@@ -1,4 +1,4 @@
-import { getUserId, getSupabaseClient, getUserSession } from '@/lib/db';
+import { getUserId, getSupabaseClient, getUserSession } from '@/lib/user-utils';
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 

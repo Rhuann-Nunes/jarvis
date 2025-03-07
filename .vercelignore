@@ -1,0 +1,15 @@
+.git
+.github
+.vscode
+node_modules
+README.md
+*.log
+.env.local
+.env.development.local
+.env.test.local
+prisma
+JARVIS-API-INTEGRATION.md
+jarvis-api.md
+SOLUCAO.md
+SUBSCRIPTION-SYSTEM.md
+SUPABASE-MIGRATION.md 

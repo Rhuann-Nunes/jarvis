@@ -57,9 +57,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SectionService = exports.ProjectService = exports.TaskService = void 0;
-var prisma_1 = require("./prisma");
-// Redirecionar todas as operações para o db-utils.ts que usa Prisma
 var db_utils_1 = require("./db-utils");
+// Este arquivo será substituído pelo db-utils.ts que usa Supabase diretamente
 // Apenas para compatibilidade durante a migração - 
 // este arquivo será completamente substituído pelo db-utils.ts no futuro
 // Todas as chamadas de serviço redirecionam para os novos serviços do Prisma
@@ -113,13 +112,7 @@ exports.TaskService = {
                     userId = _a.sent();
                     if (!userId || !projectId)
                         return [2 /*return*/, []];
-                    return [4 /*yield*/, prisma_1.prisma.task.findMany({
-                            where: {
-                                userId: userId,
-                                projectId: projectId
-                            },
-                            orderBy: { dueDate: 'asc' }
-                        })];
+                    return [4 /*yield*/, db_utils_1.TaskService.getTasksByProject(userId, projectId)];
                 case 2:
                     tasks = _a.sent();
                     // Converter campos null para undefined para compatibilidade de tipo
@@ -136,13 +129,7 @@ exports.TaskService = {
                     userId = _a.sent();
                     if (!userId || !sectionId)
                         return [2 /*return*/, []];
-                    return [4 /*yield*/, prisma_1.prisma.task.findMany({
-                            where: {
-                                userId: userId,
-                                sectionId: sectionId
-                            },
-                            orderBy: { dueDate: 'asc' }
-                        })];
+                    return [4 /*yield*/, db_utils_1.TaskService.getTasksBySection(userId, sectionId)];
                 case 2:
                     tasks = _a.sent();
                     // Converter campos null para undefined para compatibilidade de tipo
@@ -234,17 +221,7 @@ exports.TaskService = {
                         if (!endDate && days > 0) {
                             end.setDate(end.getDate() + days);
                         }
-                        return [4 /*yield*/, prisma_1.prisma.task.findMany({
-                                where: {
-                                    userId: userId,
-                                    completed: false,
-                                    dueDate: {
-                                        gte: start,
-                                        lte: end
-                                    }
-                                },
-                                orderBy: { dueDate: 'asc' }
-                            })];
+                        return [4 /*yield*/, db_utils_1.TaskService.getUpcomingTasks(userId, start, end)];
                     case 2:
                         tasks = _a.sent();
                         // Converter campos null para undefined para compatibilidade de tipo
@@ -332,17 +309,7 @@ exports.TaskService = {
                         if (!endDate && days > 0) {
                             end.setDate(end.getDate() + days);
                         }
-                        return [4 /*yield*/, prisma_1.prisma.task.findMany({
-                                where: {
-                                    userId: userId,
-                                    completed: false,
-                                    dueDate: {
-                                        gte: start,
-                                        lte: end
-                                    }
-                                },
-                                orderBy: { dueDate: 'asc' }
-                            })];
+                        return [4 /*yield*/, db_utils_1.TaskService.getTasksByDateRange(userId, start, end)];
                     case 2:
                         tasks = _a.sent();
                         // Converter campos null para undefined para compatibilidade de tipo

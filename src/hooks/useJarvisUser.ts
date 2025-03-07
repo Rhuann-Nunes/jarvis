@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getUserId, getUserSession } from '@/lib/db';
+import { getUserSession } from '@/lib/user-utils';
 import { JarvisClient } from '@/lib/jarvis-api';
 
 interface JarvisUserData {

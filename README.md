@@ -1,134 +1,100 @@
-# JARVIS - Your Personal AI Assistant
+# JARVIS - Seu Assistente Pessoal de Produtividade
 
-JARVIS is a Progressive Web App (PWA) inspired by Iron Man's AI assistant. It helps you manage tasks, projects, and reminders with natural language processing powered by OpenAI.
+## 📌 Sobre
 
-## Features
+JARVIS é uma aplicação de produtividade que permite gerenciar tarefas, projetos e utilizar inteligência artificial para aumentar sua eficiência.
 
-- **AI-Powered Task Analysis**: Enter tasks in natural language and JARVIS will extract dates, times, and recurrence patterns.
-- **Project Management**: Organize tasks into projects and sections.
-- **Smart Notifications**: Get reminders for your tasks at the right time.
-- **Voice Input**: Add tasks using your voice.
-- **PWA Support**: Install JARVIS on your device for offline access.
-- **Dark Mode**: Toggle between light and dark themes.
-- **Supabase Integration**: Cloud storage and synchronization across devices.
-- **User Authentication**: Secure login via Google OAuth.
+## 🚀 Deploy com Vercel
 
-## Getting Started
+Este projeto está configurado para deploy com a Vercel. Todas as referências ao Prisma ORM foram removidas e o projeto agora utiliza apenas o Supabase para gerenciamento de banco de dados.
 
-### Prerequisites
+### Preparação para o Deploy
 
-- Node.js 18.0.0 or higher
-- npm 9.0.0 or higher
-- OpenAI API key
-- Supabase account
+1. Clone o repositório para sua máquina local
+2. Instale as dependências com `npm install --legacy-peer-deps`
+3. Certifique-se de que seu projeto Supabase está configurado corretamente
+4. Configure as variáveis de ambiente necessárias
 
-### Installation
+### Variáveis de Ambiente
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/jarvis.git
-   cd jarvis
-   ```
+Configure as seguintes variáveis de ambiente no painel da Vercel:
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+```
+# OpenAI API Key
+OPENAI_API_KEY=sua_chave_api_openai
 
-3. Create a `.env.local` file in the root directory and add your API keys:
-   ```
-   # OpenAI API Key
-   OPENAI_API_KEY=your_openai_api_key_here
-   
-   # Supabase credentials
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-   SUPABASE_JWT_SECRET=your_supabase_jwt_secret
-   
-   # NextAuth configuration
-   NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=your_nextauth_secret_here
-   
-   # Google OAuth credentials (optional)
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
-   ```
+# Next Auth
+NEXTAUTH_URL=https://seu-site.vercel.app
+NEXTAUTH_SECRET=alguma_string_secreta_longa
 
-4. Set up the database in Supabase:
-   - Log in to your Supabase dashboard
-   - Navigate to the SQL Editor
-   - Execute the SQL files in the `src/tables` directory in the following order:
-     1. `nextauth.sql` - Sets up the NextAuth schema
-     2. `users.sql` - Adds additional functionality to users table
-     3. `projects.sql` - Creates the projects table
-     4. `sections.sql` - Creates the sections table
-     5. `tasks.sql` - Creates the tasks table
-   
-   Alternatively, you can execute `src/tables/create-all.sql` which will run all scripts in sequence.
+# Google OAuth credentials
+GOOGLE_CLIENT_ID=seu_google_client_id
+GOOGLE_CLIENT_SECRET=seu_google_client_secret
 
-5. Start the development server:
-   ```
-   npm run dev
-   ```
+# Groq API (se necessário)
+GROQ_API_KEY=sua_chave_api_groq
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+# Supabase credentials
+NEXT_PUBLIC_SUPABASE_URL=seu_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=sua_supabase_service_role_key
+SUPABASE_JWT_SECRET=seu_supabase_jwt_secret
+```
 
-## Usage
+### Deploy
 
-### Adding Tasks
+1. Conecte seu repositório à Vercel
+2. Configure as variáveis de ambiente mencionadas acima
+3. Deploy!
 
-Type your task in the input field at the top of the page. You can include:
-- Dates and times: "Meeting tomorrow at 3pm"
-- Recurrence: "Pay rent on the 1st of every month"
-- Project tags: "Design homepage #Website"
-- Section tags: "Update API documentation #Website /Backend"
+## 📝 Notas sobre a migração do Prisma para o Supabase
 
-### Managing Projects
+Este projeto foi migrado do Prisma ORM para usar apenas Supabase diretamente. As principais mudanças incluíram:
 
-Click the "+" button in the Projects section to create a new project. Each project can have multiple sections to further organize your tasks.
+1. Remoção de todas as dependências do Prisma (`prisma` e `@prisma/client`)
+2. Remoção da pasta `prisma/` e arquivos relacionados
+3. Substituição das consultas do Prisma por chamadas diretas ao Supabase
+4. Criação de um módulo de utilitários `src/lib/user-utils.ts` para centralizar funções de autenticação
 
-### Task Actions
+Se você precisar fazer mais alterações relacionadas à remoção do Prisma, procure por:
 
-- Click the circle to mark a task as complete
-- Click the pencil icon to edit a task
-- Click the trash icon to delete a task
+- Referências restantes a `prisma` em arquivos JavaScript compilados
+- Arquivos de migração ou configuração do Prisma que podem ter sido esquecidos
+- Comentários obsoletos mencionando o Prisma
 
-### Data Migration
+## 🧰 Tecnologias
 
-If you previously used JARVIS with localStorage, you can migrate your data to Supabase:
+- Next.js 15.2.0
+- Supabase
+- Next Auth
+- OpenAI/API de IA
+- TypeScript
+- Tailwind CSS
 
-1. Log in to your account
-2. Go to Settings page
-3. Click "Migrate to Supabase" button
-4. Wait for the migration to complete
+## 🛠️ Desenvolvimento Local
 
-For more details, see [SUPABASE-MIGRATION.md](./SUPABASE-MIGRATION.md).
+```bash
+# Instalar dependências
+npm install --legacy-peer-deps
 
-## Database Schema
+# Executar em modo de desenvolvimento
+npm run dev
 
-JARVIS uses Supabase PostgreSQL with the following tables:
+# Construir para produção
+npm run build
 
-- **next_auth.users**: Stores user information and authentication data
-- **public.projects**: Contains groups of related tasks
-- **public.sections**: Subdivides projects into categories
-- **public.tasks**: The main entity with support for recurrence, due dates, etc.
+# Iniciar servidor de produção
+npm start
+```
 
-All tables have Row Level Security (RLS) policies to ensure users can only access their own data.
+## 📦 Estrutura do Projeto
 
-## Authentication
+- `src/app/` - Páginas e API routes
+- `src/components/` - Componentes React reutilizáveis
+- `src/lib/` - Bibliotecas e utilitários
+- `src/hooks/` - Custom React hooks
+- `public/` - Arquivos estáticos
 
-Authentication is handled by NextAuth.js with Supabase adapter:
+## 📄 Licença
 
-- Google OAuth (default)
-- Add more providers as needed in `src/lib/auth.ts`
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Inspired by Iron Man's JARVIS
-- Built with Next.js, TypeScript, and Tailwind CSS
-- Powered by OpenAI and Supabase
+Todos os direitos reservados.
